@@ -21,21 +21,13 @@ public class MainActivity extends AppCompatActivity {
     private boolean running;
     private Button btnRun;
 
+    private FecklessPreferences fecklessPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         btnRun = (Button)findViewById(R.id.run_button);
-
-        retrieveSeconds();
-
-        if(savedInstanceState != null){
-            seconds = savedInstanceState.getInt("seconds");
-            running = savedInstanceState.getBoolean("running");
-            btnRun.setText(savedInstanceState.getString("text"));
-        }
-
-
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -50,46 +42,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         runTimer();
-    }
-
-    private void retrieveSeconds() {
-        SharedPreferences sp = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        if(sp.contains("secondsAtOnPause")) {
-            long resumeTime = System.currentTimeMillis();
-            long stopTime = sp.getLong("timeAtOnPause", 0L);
-            int elapsed = (int) (((resumeTime - stopTime)/1000));
-
-            seconds = sp.getInt("secondsAtOnPause", 0) + elapsed;
-            running = true;
-            btnRun.setText(R.string.pause);
-        }else if (sp.contains("secondsNotRunning")){
-            running = false;
-            seconds = sp.getInt("secondsNotRunning", 0);
-        }else{
-            seconds = 0;
-            running = false;
-        }
-
-        SharedPreferences.Editor editor = sp.edit();
-        editor.remove(PREFS_NAME);
-        editor.apply();
-    }
-
-    public void onClickRun(View view){
-        if(running){
-            running = false;
-            btnRun.setText(R.string.start);
-        }else{
-            running = true;
-            btnRun.setText(R.string.pause);
-        }
-    }
-
-
-    public void onClickReset(View view){
-        running = false;
-        btnRun.setText(R.string.start);
-        seconds = 0;
     }
 
     private void runTimer(){
@@ -121,33 +73,20 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putInt("seconds", seconds);
-        outState.putBoolean("running", running);
-        outState.putString("text", btnRun.getText().toString());
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+    public void onClickRun(View view){
+        if(running){
+            running = false;
+            btnRun.setText(R.string.start);
+        }else{
+            running = true;
+            btnRun.setText(R.string.pause);
         }
+    }
 
-        return super.onOptionsItemSelected(item);
+    public void onClickReset(View view){
+        running = false;
+        btnRun.setText(R.string.start);
+        seconds = 0;
     }
 
     public void addHour(View view) {
@@ -181,20 +120,52 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        saveTimerState();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fecklessPreferences = new FecklessPreferences(getApplicationContext());
+        retrieveTimerState();
+    }
+
+    private void saveTimerState() {
         if(running){
-            SharedPreferences timePrefs = getSharedPreferences(PREFS_NAME, 0);
-            SharedPreferences.Editor editor = timePrefs.edit();
-            editor.putInt("secondsAtOnPause", seconds);
-            editor.putLong("timeAtOnPause", System.currentTimeMillis());
-            editor.remove("secondsNotRunning");
-            editor.apply();
+            fecklessPreferences.runningStorePrefs(seconds);
         }else{
-            SharedPreferences timePrefs = getSharedPreferences(PREFS_NAME, 0);
-            SharedPreferences.Editor editor = timePrefs.edit();
-            editor.putInt("secondsNotRunning", seconds);
-            editor.remove("secondsAtOnPause");
-            editor.remove("timeAtOnPause");
-            editor.apply();
+            fecklessPreferences.notRunningStorePrefs(seconds);
         }
+    }
+
+    private void retrieveTimerState() {
+        seconds = fecklessPreferences.getSecondsFromPrefs();
+        running = fecklessPreferences.isRunning;
+
+        if(running)btnRun.setText(R.string.pause);
+
+        fecklessPreferences.clearPrefs();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
