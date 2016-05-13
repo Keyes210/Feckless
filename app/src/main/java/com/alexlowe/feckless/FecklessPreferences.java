@@ -9,6 +9,9 @@ import android.content.SharedPreferences;
 public class FecklessPreferences {
     private static final String TIMER_PREFS = "timer_prefs";
     private static final String DAY_PREFS = "day_prefs";
+    public static final String KEY_RUNNING_SECONDS = "secondsAtOnPause";
+    public static final String KEY_TIME_AT_PAUSE = "timeAtOnPause";
+    public static final String KEY_NOT_RUNNING_SECONDS = "secondsNotRunning";
 
     private SharedPreferences timerPrefs;
     private SharedPreferences dayPrefs;
@@ -26,32 +29,32 @@ public class FecklessPreferences {
     }
 
     public void runningStorePrefs(int seconds){
-        timerEditor.putInt("secondsAtOnPause", seconds);
-        timerEditor.putLong("timeAtOnPause", System.currentTimeMillis());
-        timerEditor.remove("secondsNotRunning");
+        timerEditor.putInt(KEY_RUNNING_SECONDS, seconds);
+        timerEditor.putLong(KEY_TIME_AT_PAUSE, System.currentTimeMillis());
+        timerEditor.remove(KEY_NOT_RUNNING_SECONDS);
         timerEditor.apply();
     }
 
     public void notRunningStorePrefs(int seconds){
-        timerEditor.putInt("secondsNotRunning", seconds);
-        timerEditor.remove("secondsAtOnPause");
-        timerEditor.remove("timeAtOnPause");
+        timerEditor.putInt(KEY_NOT_RUNNING_SECONDS, seconds);
+        timerEditor.remove(KEY_RUNNING_SECONDS);
+        timerEditor.remove(KEY_TIME_AT_PAUSE);
         timerEditor.apply();
     }
 
     public int getSecondsFromPrefs(){
         int seconds = 0;
 
-        if(timerPrefs.contains("secondsAtOnPause")){
+        if(timerPrefs.contains(KEY_RUNNING_SECONDS)){
             long resumeTime = System.currentTimeMillis();
-            long stopTime = timerPrefs.getLong("timeAtOnPause", 0L);
+            long stopTime = timerPrefs.getLong(KEY_TIME_AT_PAUSE, 0L);
             int elapsed = (int) (((resumeTime - stopTime)/1000));
 
-            seconds = timerPrefs.getInt("secondsAtOnPause", 0) + elapsed;
+            seconds = timerPrefs.getInt(KEY_RUNNING_SECONDS, 0) + elapsed;
             isRunning = true;
-        }else if(timerPrefs.contains("secondsNotRunning")){
+        }else if(timerPrefs.contains(KEY_NOT_RUNNING_SECONDS)){
             isRunning = false;
-            seconds = timerPrefs.getInt("secondsNotRunning", 0);
+            seconds = timerPrefs.getInt(KEY_NOT_RUNNING_SECONDS, 0);
         }else{
             seconds = 0;
             isRunning = false;
