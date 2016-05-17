@@ -10,4 +10,6 @@
     <string name="sub_min">- Min</string>
     <string name="add_min">+ Min</string>
     <string name="add_hour">+ Hour</string>
+    <string name="title_activity_day">DayActivity</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

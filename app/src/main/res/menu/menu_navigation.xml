@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/stopwatch"
+            android:tint="@color/button_grey"
+            android:title="Stopwatch" />
+        <item
+            android:id="@+id/mon"
+            android:tint="@color/button_grey"
+            android:title="Monday" />
+        <item
+            android:id="@+id/tue"
+            android:tint="@color/button_grey"
+            android:title="Tuesday" />
+        <item
+            android:id="@+id/wed"
+            android:tint="@color/button_grey"
+            android:title="Wednesday" />
+        <item
+            android:id="@+id/thu"
+            android:tint="@color/button_grey"
+            android:title="Thursday" />
+        <item
+            android:id="@+id/fri"
+            android:tint="@color/button_grey"
+            android:title="Friday" />
+        <item
+            android:id="@+id/sat"
+            android:tint="@color/button_grey"
+            android:title="Saturday" />
+        <item
+            android:id="@+id/sun"
+            android:tint="@color/button_grey"
+            android:title="Sunday" />
+        <item
+            android:id="@+id/total"
+            android:tint="@color/button_grey"
+            android:title="Total" />
+    </group>
+</menu>

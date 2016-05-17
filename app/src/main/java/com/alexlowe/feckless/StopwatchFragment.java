@@ -1,38 +1,52 @@
 package com.alexlowe.feckless;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Unbinder;
 
+/**
+ * Created by Keyes on 5/14/2016.
+ */
+public class StopwatchFragment extends Fragment {
     private static final String PREFS_NAME = "time_prefs";
+    private static final String TAG = "rimjob";
     private int seconds;
     private boolean running;
-    private Button btnRun;
+
+    @BindView(R.id.run_button)Button btnRun;
+    @BindView(R.id.sub_hr_button)Button btnSubHr;
+    @BindView(R.id.sub_min_button)Button btnSubMin;
+    @BindView(R.id.add_min_button)Button btnAddMin;
+    @BindView(R.id.add_hr_button)Button btnAddHr;
+    @BindView(R.id.reset_button)Button btnReset;
+    private Unbinder unbinder;
 
     private FecklessPreferences fecklessPreferences;
 
+
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        btnRun = (Button)findViewById(R.id.run_button);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_stopwatch, container, false);
+        unbinder = ButterKnife.bind(this,view);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        runTimer(view);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -41,11 +55,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        runTimer();
+        return view;
     }
 
-    private void runTimer(){
-        final TextView timeview = (TextView)findViewById(R.id.time_view);
+    private void runTimer(View view){
+        final TextView timeview = (TextView)view.findViewById(R.id.time_view);
         final Handler handler = new Handler();
 
         handler.post(new Runnable() {
@@ -73,7 +87,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void onClickRun(View view){
+
+    @OnClick(R.id.run_button)
+    public void onClickRun(){
         if(running){
             running = false;
             btnRun.setText(R.string.start);
@@ -83,19 +99,22 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void onClickReset(View view){
+    @OnClick(R.id.reset_button)
+    public void onClickReset(){
         running = false;
         btnRun.setText(R.string.start);
         seconds = 0;
     }
 
-    public void addHour(View view) {
+    @OnClick(R.id.add_hr_button)
+    public void addHour() {
         if(seconds < 356400){
             seconds += 3600;
         }
     }
 
-    public void subHour(View view) {
+    @OnClick(R.id.sub_hr_button)
+    public void subHour() {
         if(seconds > 3600){
             seconds -= 3600;
         }else{
@@ -103,13 +122,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void addMin(View view) {
+    @OnClick(R.id.add_min_button)
+    public void addMin() {
         if(seconds < 359940){
             seconds += 60;
         }
     }
 
-    public void subMin(View view) {
+    @OnClick(R.id.sub_min_button)
+    public void subMin() {
         if(seconds > 60){
             seconds -= 60;
         }else{
@@ -118,15 +139,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         super.onPause();
         saveTimerState();
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
-        fecklessPreferences = new FecklessPreferences(getApplicationContext());
+        fecklessPreferences = new FecklessPreferences(getContext());
         retrieveTimerState();
     }
 
@@ -148,24 +169,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }
