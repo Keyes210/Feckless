@@ -19,6 +19,7 @@
             android:layout_height="wrap_content"
             android:gravity="top|left"
             android:textColor="@android:color/white"
+            android:paddingBottom="20dp"
             android:textSize="24sp"/>
 
 
