@@ -1,36 +1,28 @@
 package com.alexlowe.feckless;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.TextView;
-
-import butterknife.BindView;
 
 public class Main_Activity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
+    private final FragmentManager fm = getSupportFragmentManager();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        FecklessPreferences fecklessPreferences = new FecklessPreferences(this);
+        fecklessPreferences.retrieveDays();
 
-        FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
         if (fragment == null) {
             fragment = new StopwatchFragment();
@@ -80,60 +72,56 @@ public class Main_Activity extends AppCompatActivity {
         // Create a new fragment and specify the fragment to show based on nav item clicked
         Fragment fragment = null;
         int args = 0;
-        Class fragmentClass;
+
         switch(menuItem.getItemId()) {
             case R.id.stopwatch:
-                fragmentClass = StopwatchFragment.class;
+                fragment = new StopwatchFragment();
                 break;
             case R.id.mon:
-                fragmentClass = PagerFragment.class;
+                fragment =  new PagerFragment();
                 args = 0;
                 break;
             case R.id.tue:
-                fragmentClass = PagerFragment.class;
+                fragment =  new PagerFragment();
                 args = 1;
                 break;
             case R.id.wed:
-                fragmentClass = PagerFragment.class;
+                fragment =  new PagerFragment();
                 args = 2;
                 break;
             case R.id.thu:
-                fragmentClass = PagerFragment.class;
+                fragment =  new PagerFragment();
                 args = 3;
                 break;
             case R.id.fri:
-                fragmentClass = PagerFragment.class;
+                fragment =  new PagerFragment();
                 args = 4;
                 break;
             case R.id.sat:
-                fragmentClass = PagerFragment.class;
+                fragment =  new PagerFragment();
                 args = 5;
                 break;
             case R.id.sun:
-                fragmentClass = PagerFragment.class;
+                fragment =  new PagerFragment();
                 args = 6;
                 break;
             case R.id.total:
-                fragmentClass = TotalFragment.class;
+                fragment =  new TotalFragment();
                 break;
             default:
-                fragmentClass = StopwatchFragment.class;
+                fragment =  new StopwatchFragment();
         }
 
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        drawerFragmentTransaction(fragment, args, menuItem);
 
+    }
+
+    public void drawerFragmentTransaction(Fragment fragment, int args, MenuItem menuItem){
         Bundle bundle = new Bundle();
         bundle.putInt("tab", args);
         fragment.setArguments(bundle);
 
-        // Insert the fragment by replacing any existing fragment
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
-
+        fm.beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
         setTitle(menuItem.getTitle());
     }
 
@@ -152,12 +140,18 @@ public class Main_Activity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_timer) {
+            fm.beginTransaction().replace(R.id.fragmentContainer, new StopwatchFragment()).commit();
+            setTitle("Stopwatch");
+        }else if(id == R.id.action_total) {
+            fm.beginTransaction().replace(R.id.fragmentContainer, new TotalFragment()).commit();
+            setTitle("Total");
         }else if(id == android.R.id.home){
             drawerLayout.openDrawer(GravityCompat.START);
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+
 }

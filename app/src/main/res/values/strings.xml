@@ -12,4 +12,6 @@
     <string name="add_hour">+ Hour</string>
     <string name="title_activity_day">DayActivity</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="timer">Timer</string>
+    <string name="total">total</string>
 </resources>

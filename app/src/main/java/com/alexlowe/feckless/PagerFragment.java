@@ -12,11 +12,15 @@ import android.view.ViewGroup;
 
 public class PagerFragment extends Fragment {
     public static final String DAY_OBJECT = "day_object";
+    private DayFragmentAdapter adapter;
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pager, container, false);
+        adapter = new DayFragmentAdapter(getChildFragmentManager());
+
         // Setting ViewPager for each Tabs
         final ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         setUpViewPager(viewPager);
@@ -33,7 +37,6 @@ public class PagerFragment extends Fragment {
     }
 
     private void setUpViewPager(ViewPager viewPager) {
-        DayFragmentAdapter adapter = new DayFragmentAdapter(getActivity().getSupportFragmentManager());
         for (int i = 0; i < Day.days.length; i++) {
             DayFragment fragment = new DayFragment();
             Bundle bundle = new Bundle();
@@ -43,6 +46,23 @@ public class PagerFragment extends Fragment {
         }
 
         viewPager.setAdapter(adapter);
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                getActivity().setTitle(adapter.getTitle(position));
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
 

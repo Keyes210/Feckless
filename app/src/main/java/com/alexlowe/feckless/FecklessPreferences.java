@@ -2,6 +2,7 @@ package com.alexlowe.feckless;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 /**
  * Created by Keyes on 5/12/2016.
@@ -12,6 +13,14 @@ public class FecklessPreferences {
     public static final String KEY_RUNNING_SECONDS = "secondsAtOnPause";
     public static final String KEY_TIME_AT_PAUSE = "timeAtOnPause";
     public static final String KEY_NOT_RUNNING_SECONDS = "secondsNotRunning";
+
+    public static final String KEY_MON = "mondaySeconds";
+    public static final String KEY_TUE = "tuesdaySeconds";
+    public static final String KEY_WED = "wedsdaySeconds";
+    public static final String KEY_THU = "thursdaySeconds";
+    public static final String KEY_FRI = "fridaySeconds";
+    public static final String KEY_SAT = "saturdaySeconds";
+    public static final String KEY_SUN = "sundaySeconds";
 
     private SharedPreferences timerPrefs;
     private SharedPreferences dayPrefs;
@@ -62,6 +71,30 @@ public class FecklessPreferences {
 
         return seconds;
     }
+
+    public void storeDays(){
+        Log.i("rimjob", "Storing... ");
+        dayEditor.putInt(KEY_MON, Day.days[0].getSeconds());
+        dayEditor.putInt(KEY_TUE, Day.days[1].getSeconds());
+        dayEditor.putInt(KEY_WED, Day.days[2].getSeconds());
+        dayEditor.putInt(KEY_THU, Day.days[3].getSeconds());
+        dayEditor.putInt(KEY_FRI, Day.days[4].getSeconds());
+        dayEditor.putInt(KEY_SAT, Day.days[5].getSeconds());
+        dayEditor.putInt(KEY_SUN, Day.days[6].getSeconds());
+        dayEditor.apply();
+    }
+
+    public void retrieveDays(){
+            Log.i("rimjob", "Prefs Restored");
+            Day.days[0].setSeconds(dayPrefs.getInt(KEY_MON, 0));
+            Day.days[1].setSeconds(dayPrefs.getInt(KEY_TUE, 0));
+            Day.days[2].setSeconds(dayPrefs.getInt(KEY_WED, 0));
+            Day.days[3].setSeconds(dayPrefs.getInt(KEY_THU, 0));
+            Day.days[4].setSeconds(dayPrefs.getInt(KEY_FRI, 0));
+            Day.days[5].setSeconds(dayPrefs.getInt(KEY_SAT, 0));
+            Day.days[6].setSeconds(dayPrefs.getInt(KEY_SUN, 0));
+    }
+
 
     public void clearPrefs(){
         timerEditor.clear();

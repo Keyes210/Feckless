@@ -1,12 +1,17 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/bg_frag1"
-                android:orientation="vertical"
-                android:gravity="center_horizontal"
-                tools:context=".PagerFragment$PlaceholderFragment">
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:fitsSystemWindows="true"
+    android:padding="0dp"
+    android:background="@drawable/bg_frag1"
+    android:layout_height="match_parent">
 
+    <LinearLayout
+                  android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:gravity="center_horizontal">
 
         <TextView
             android:id="@+id/title"
@@ -74,9 +79,20 @@
             android:id="@+id/secWord"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+
             android:textColor="@android:color/white"
             android:textSize="24sp"/>
 
+    </LinearLayout>
 
+    <android.support.design.widget.FloatingActionButton
+    android:id="@+id/fab"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="end|bottom"
+    android:layout_marginBottom="@dimen/md_keylines"
+    android:layout_marginRight="@dimen/md_keylines"
+    android:layout_marginEnd="@dimen/md_keylines"
+    android:src="@drawable/ic_delete_white_48dp" />
 
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

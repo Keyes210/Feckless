@@ -3,8 +3,15 @@
       xmlns:tools="http://schemas.android.com/tools"
       tools:context=".Main_Activity">
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never"/>
+        android:id="@+id/action_timer"
+        android:orderInCategory="102"
+        android:icon="@drawable/ic_access_alarm_white_48dp"
+        android:title="@string/timer"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/action_total"
+        android:orderInCategory="101"
+        android:icon="@drawable/ic_action_sigma"
+        android:title="@string/total"
+        app:showAsAction="always"/>
 </menu>
