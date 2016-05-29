@@ -204,6 +204,7 @@ public class StopwatchFragment extends Fragment {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     Day.saveSeconds(toolBarItem, seconds);
+                    Toast.makeText(getContext(), "Time Saved", Toast.LENGTH_SHORT).show();
                 }
             });
             builder.setNegativeButton("Cancel", null);

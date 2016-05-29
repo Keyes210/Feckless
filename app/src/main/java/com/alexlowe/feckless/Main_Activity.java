@@ -55,7 +55,6 @@ public class Main_Activity extends AppCompatActivity {
                         public boolean onNavigationItemSelected(MenuItem menuItem) {
                             // Set item in checked state
                             menuItem.setChecked(true);
-                            // TODO: handle navigation
                             selectDrawerItem(menuItem);
                             // Closing drawer on item click
                             drawerLayout.closeDrawers();
