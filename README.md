@@ -43,3 +43,18 @@ This is a stopwatch app meant to keep track of idle time, time that you could ha
 &nbsp;
 &nbsp;
 <img src="https://raw.githubusercontent.com/Keyes210/Feckless/master/app/screenShots/device-2016-05-19-201503.png" width="200">
+
+<br/>
+<br/>
+<br/>
+<b>I've also documented the process of making this app on my blog:</b>
+<br/>
+<a href="https://medium.com/@keyes210/feckless-i-efd124f19a89#.diveetixo">Part 1</a>
+<br/>
+<a href="https://medium.com/@keyes210/feckless-ii-cleaning-up-a-little-828a04264bb#.kvfqrhm67">Part 2</a>
+<br/>
+<a href="https://medium.com/@keyes210/feckless-iii-fragments-in-fragments-in-fragments-23bd0c421258#.cdmjisd5k">Part 3</a>
+<br/>
+<a href="https://medium.com/@keyes210/feckless-iv-turns-out-im-done-dec5b2286c86">Part 4</a>
+<br/>
+<a href="https://medium.com/@keyes210/feckless-v-b-b-b-break-it-down-17d2e6380121#.c8898ewhs">Part 5</a>
